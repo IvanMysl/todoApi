@@ -1,0 +1,14 @@
+.completed{
+    text-decoration: line-through;
+}
+.todo__list{
+    list-style: none;
+}
+.item{
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+#p{
+    font-size: 20px;
+}
