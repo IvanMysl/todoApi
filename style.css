@@ -1,14 +1,75 @@
-.completed{
-    text-decoration: line-through;
+.addtegs__inner {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
-.todo__list{
-    list-style: none;
+.addtegs {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+  border-bottom: 3px solid red;
 }
-.item{
-    margin-bottom: 50px;
-    display: flex;
-    justify-content: space-between;
+.zagolovok {
+  text-align: center;
+  border-bottom: 3px solid red;
 }
-#p{
-    font-size: 20px;
+.input__add {
+  font-size: 30px;
+  max-width: 500px;
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  text-align: center;
+}
+.add__btn {
+  width: 300px;
+  height: 40px;
+  font-size: 20px;
+  border: none;
+  background-color: rgb(136, 136, 29);
+  border-radius: 30px;
+  cursor: pointer;
+}
+.add__btn:hover {
+  color: red;
+}
+.inner {
+  display: flex;
+}
+.completed {
+  text-decoration: line-through;
+}
+.text {
+  padding-left: 5px;
+}
+.text::first-letter {
+  text-transform: uppercase;
+}
+.todo__list {
+  list-style: none;
+}
+.item {
+  margin-bottom: 50px;
+  background-color: aquamarine;
+  border-radius: 10px;
+  border: 3px solid green;
+  display: flex;
+  justify-content: space-between;
+}
+.item .input__true-false:checked + .text {
+  text-decoration: line-through;
+}
+.button__delete {
+  border: none;
+  background-color: rgb(204, 157, 248);
+  color: black;
+  font-size: 15px;
+  cursor: pointer;
+}
+.button__delete:hover {
+  color: rgb(8, 61, 167);
+  font-size: 16px;
+}
+#p {
+  font-size: 20px;
 }

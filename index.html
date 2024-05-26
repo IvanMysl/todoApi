@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
     <title>todo_api</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <ul class="todo__list"></ul>
-        
+      <div class="addtegs__inner">
+        <div class="addtegs">
+          <h1 class="zagolovok">Додати завдання</h1>
+          <input
+            type="text"
+            class="input__add"
+            placeholder="Напишіть своє завдання"
+          />
+          <button class="add__btn">Натисніть, щоб додати</button>
+        </div>
+      </div>
+      <ul class="todo__list"></ul>
     </div>
     <script src="./index.js"></script>
-</body>
+  </body>
 </html>
