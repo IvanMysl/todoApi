@@ -19,7 +19,9 @@ const renderData = (todos) => {
     .map((todo) => {
       return `<li class="item">
     <div class="inner"><p id="p">${todo.id}.</p>
-    <input type="checkbox" onclick="saveChecked(${todo.id},${todo.completed})" class="input__true-false" ${todo.completed ? "checked" : ""}>
+    <input type="checkbox"  onchange="onchange(${todo.id}, ${
+        todo.completed
+      })" class="input__true-false" ${todo.completed ? "checked" : ""}>
     <p class="${todo.completed ? "completed" : ""} text" id="p">${
         todo.title
       }</p>
@@ -75,21 +77,24 @@ function deleteTask(id) {
       // handle error
     });
 }
-function saveChecked(id, todo) {
+function onchange(id, completed) {
   fetch(`https://664089e9a7500fcf1a9e0886.mockapi.io/todo/${id}`, {
     method: "PUT",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ completed: `${todo.completed ? "true" : "false"}` }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ completed: !completed }),
   })
     .then((response) => {
       if (response.ok) {
-        getData();
         return response.json();
+      } else {
+        throw new Error('Failed to update todo');
       }
     })
-    .then((task) => {})
+    .then((updatedTodo) => {
+      getData(); // Обновите данные после успешного обновления todo
+    })
     .catch((error) => {
-      // handle error
+      console.error(error);
     });
 }
 
