@@ -1,101 +1,80 @@
 const list = document.querySelector(".todo__list");
 const button = document.querySelector(".add__btn");
 const inputAdd = document.querySelector(".input__add");
-const fetchTodos = () => {
-  return fetch("https://664089e9a7500fcf1a9e0886.mockapi.io/todo").then(
-    (response) => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      //   console.log(response.json());
+const apiUrl = "https://664089e9a7500fcf1a9e0886.mockapi.io/todo";
 
-      return response.json();
+const fetchTodos = () => {
+  return fetch(apiUrl).then((response) => {
+    if (!response.ok) {
+      throw new Error(response.status);
     }
-  );
+    return response.json();
+  });
 };
+
 const renderData = (todos) => {
-  // console.log(todos);
   const marcup = todos
     .map((todo) => {
-      return `<li class="item">
-    <div class="inner"><p id="p">${todo.id}.</p>
-    <input type="checkbox"  onchange="onchange(${todo.id}, ${
-        todo.completed
-      })" class="input__true-false" ${todo.completed ? "checked" : ""}>
-    <p class="${todo.completed ? "completed" : ""} text" id="p">${
-        todo.title
-      }</p>
+      return `<li class="item" data-id="${todo.id}">
+    <div class="inner">
+    <p class="id">${todo.id}.</p>
+    <input type="checkbox" class="input__true-false" ${
+      todo.completed ? "checked" : ""
+    }>
+    <p class="${todo.completed ? "completed" : ""} text">${todo.title}</p>
     </div>
-    <button class="button__delete" onclick="deleteTask(${
-      todo.id
-    })">Видалити завдання</button>
+    <button class="button__delete">Видалити завдання</button>
     </li>`;
     })
     .join("");
   list.innerHTML = marcup;
 };
-function getData() {
-  fetchTodos().then((todos) => renderData(todos));
-}
-button.addEventListener("click", () => {
-  console.log(document.querySelectorAll(".input__true-false"));
-  const inputText = inputAdd.value;
-  if (inputText.trim() === "") {
-    inputAdd.style.borderColor = "red";
-  } else {
-    inputAdd.style.borderColor = "black";
-    inputAdd.value = "";
 
-    const newTask = {
-      title: `${inputText}`,
-      completed: false,
-    };
-    fetch("https://664089e9a7500fcf1a9e0886.mockapi.io/todo", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(newTask),
-    })
-      .then((response) => {
-        response.json();
-        getData();
-      })
-      .then((json) => console.log(json));
+const getData = () => {
+  fetchTodos().then((todos) => renderData(todos));
+};
+const addTodo = (title) => {
+  const newTask = {
+    title: title ,
+    completed: false,
+  };
+  return fetch(apiUrl, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(newTask),
+  }).then((response) => response.json());
+};
+const deleteTodo = (id) => {
+  return fetch(`${apiUrl}/${id}`, {
+    method: "DELETE",
+  }).then((response) => response.json());
+};
+const updateTodo = (id, completed) => {
+  return fetch(`${apiUrl}/${id}`, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ completed }),
+  }).then((response) => response.json());
+};
+list.addEventListener("click", (e) => {
+  if (e.target.classList.contains("button__delete")) {
+    const id = e.target.closest(".item").dataset.id;
+    deleteTodo(id).then(() => getData());
+  }
+  if (e.target.classList.contains("input__true-false")) {
+    const id = e.target.closest(".item").dataset.id;
+    const completed = e.target.checked;
+    updateTodo(id, completed).then(() => getData());
   }
 });
-function deleteTask(id) {
-  fetch(`https://664089e9a7500fcf1a9e0886.mockapi.io/todo/${id}`, {
-    method: "DELETE",
-  })
-    .then((response) => {
-      if (response.ok) {
-        getData();
-        return response.json();
-      }
-    })
-    .then((task) => {})
-    .catch((error) => {
-      // handle error
+button.addEventListener("click", () => {
+  const title = inputAdd.value.trim();
+  if (title) {
+    addTodo(title).then(() => {
+      inputAdd.value = "";
+      getData();
     });
-}
-function onchange(id, completed) {
-  fetch(`https://664089e9a7500fcf1a9e0886.mockapi.io/todo/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ completed: !completed }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Failed to update todo');
-      }
-    })
-    .then((updatedTodo) => {
-      getData(); // Обновите данные после успешного обновления todo
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
+  }
+});
 
 getData();
